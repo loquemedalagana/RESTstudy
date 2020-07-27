@@ -16,6 +16,8 @@ const articleSchema = new mongoose.Schema({
 });
 const Article = mongoose.model("Article", articleSchema);
 
+//req targetting all articles
+
 app.route("/articles") //for a single route
 
 .get((req, res) => {
@@ -54,6 +56,41 @@ app.route("/articles") //for a single route
         }
     });
 }); //chained method
+
+//req for a specific route
+
+app.route("/articles/:articleTitle") //routing parameter
+
+.get((req, res) => {
+    Article.findOne({title: req.params.articleTitle}, (err, foundArticle) => {
+        if(err){
+            res.send(err);
+        }
+        else{
+            if(foundArticle){
+                res.send(foundArticle);
+            }
+            else{
+                res.send("No articles matching that title was found");
+            }
+        }
+    });        
+})
+
+.put((req, res) => {
+    Article.update(
+        {title: req.params.articleTitle},
+        {title: req.body.title, content: req.body.content},
+        {overwrite : true},
+        (err) =>{
+            if(err){
+                res.send(err);
+            }
+            else{
+                res.send("changed!");
+            }
+    });
+});
 
 
 app.listen(3000, () => console.log("Server started on port 3000"));
