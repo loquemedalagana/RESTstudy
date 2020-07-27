@@ -90,6 +90,21 @@ app.route("/articles/:articleTitle") //routing parameter
                 res.send("changed!");
             }
     });
+})
+
+.patch((req, res) => {
+    Article.update(
+        {title: req.params.articleTitle},
+        {$set: req.body}, //클라가 어느 부분을 업데이트할건지 선택? (다른거만 업데이트)
+        (err) => {
+            if(err){
+                res.send(err);
+            }
+            else{
+                res.send("changed!");
+            }
+        }
+    );
 });
 
 
